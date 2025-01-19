@@ -135,6 +135,9 @@ function App() {
         <br />
         <button type="submit">Submit</button>
       </form>
+      {result !== null && (
+        <h2><center>Arithmetic Result: {result}</center></h2>
+      )}
     </div>
   );
 }
