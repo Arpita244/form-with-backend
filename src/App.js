@@ -8,8 +8,11 @@ function App() {
     message: '',
     phone: '',
     qualification: '',
+    num1: '',       // First number for arithmetic
+    num2: '',       // Second number for arithmetic
+    operation: 'add', // Default operation
   });
-
+  const [result, setResult] = useState(null);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -24,6 +27,14 @@ function App() {
       console.log(response)
       alert(JSON.stringify(response.data.receivedData));
       console.log('Data received:', response.data);
+
+      const mathResponse = await axios.post('http://localhost:5000/operate', {
+        num1: formData.num1,
+        num2: formData.num2,
+        operation: formData.operation,
+      });
+      setResult(mathResponse.data.result);  // Display result from backend
+      console.log('Math result received:', mathResponse.data);
     } catch (error) {
       alert('Error submitting data.');
       console.error('Error:', error);
@@ -84,6 +95,42 @@ function App() {
             onChange={handleChange}
             required
           />
+        </label>
+        <label>
+          Number 1:
+          <input
+            type="number"
+            name="num1"
+            value={formData.num1}
+            onChange={handleChange}
+            required
+          />
+        </label>
+        <br />
+        <label>
+          Number 2:
+          <input
+            type="number"
+            name="num2"
+            value={formData.num2}
+            onChange={handleChange}
+            required
+          />
+        </label>
+        <br />
+        <label>
+          Operation:
+          <select
+            name="operation"
+            value={formData.operation}
+            onChange={handleChange}
+            required
+          >
+            <option value="add">Add</option>
+            <option value="subtract">Subtract</option>
+            <option value="multiply">Multiply</option>
+            <option value="divide">Divide</option>
+          </select>
         </label>
         <br />
         <button type="submit">Submit</button>
