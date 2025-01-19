@@ -6,6 +6,8 @@ function App() {
     name: '',
     email: '',
     message: '',
+    phone: '',
+    qualification: '',
   });
 
   const handleChange = (e) => {
@@ -19,7 +21,8 @@ function App() {
     console.log("Sending data:", formData);
     try {
       const response = await axios.post('http://localhost:5000/submit', formData);
-      alert(response.data.message);
+      console.log(response)
+      alert(JSON.stringify(response.data.receivedData));
       console.log('Data received:', response.data);
     } catch (error) {
       alert('Error submitting data.');
@@ -29,7 +32,7 @@ function App() {
 
   return (
     <div>
-      <h1>Submit Your Details</h1>
+      <h1><center>Submit your details</center></h1>
       <form onSubmit={handleSubmit}>
         <label>
           Name:
@@ -58,6 +61,26 @@ function App() {
           <textarea
             name="message"
             value={formData.message}
+            onChange={handleChange}
+            required
+          />
+        </label>
+        <label>
+          phone:
+          <input
+            type="number"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            required
+          />
+        </label>
+        <label>
+          qualification:
+          <input
+            type="text"
+            name="qualification"
+            value={formData.qualification}
             onChange={handleChange}
             required
           />

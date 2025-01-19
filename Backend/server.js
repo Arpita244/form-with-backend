@@ -16,8 +16,8 @@ app.get("/", (req, res) => {
 });
 
 app.post("/submit", (req, res) => {
-    const { name, email, message } = req.body;
-  console.log("Received data:", { name, email, message });
+    const { name, email, message , phone, qualification} = req.body;
+  console.log("Received data:", { name, email, message, phone , qualification});
 
     res.status(200).send({
         message: "Data received successfully!",
@@ -25,6 +25,8 @@ app.post("/submit", (req, res) => {
             name: name,
             email: email,
             message: message,
+            phone: phone,
+            qualification: qualification,
         },
     });
 });
