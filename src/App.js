@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import "./App.css";
+
 function App() {
   const [formData, setFormData] = useState({
     name: '',
@@ -8,33 +9,32 @@ function App() {
     message: '',
     phone: '',
     qualification: '',
-    num1: '',       // First number for arithmetic
-    num2: '',       // Second number for arithmetic
-    operation: 'add', // Default operation
+    num1: '',
+    num2: '',
+    operation: 'add',
   });
+
   const [result, setResult] = useState(null);
+  const [formDataReceived, setFormDataReceived] = useState(null);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    console.log(formData);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Sending data:", formData);
+    
     try {
+      // Send form data and arithmetic operation request together
       const response = await axios.post('http://localhost:5000/submit', formData);
-      console.log(response)
-      alert(JSON.stringify(response.data.receivedData));
-      console.log('Data received:', response.data);
+      
+      // Set form data received and operation result to be displayed
+      setFormDataReceived(response.data.receivedData);
+      setResult(response.data.operationResult);
 
-      const mathResponse = await axios.post('http://localhost:5000/operate', {
-        num1: formData.num1,
-        num2: formData.num2,
-        operation: formData.operation,
-      });
-      setResult(mathResponse.data.result);  // Display result from backend
-      console.log('Math result received:', mathResponse.data);
+      // Log the response to console
+      console.log('Form and operation result received:', response.data);
     } catch (error) {
       alert('Error submitting data.');
       console.error('Error:', error);
@@ -77,7 +77,7 @@ function App() {
           />
         </label>
         <label>
-          phone:
+          Phone:
           <input
             type="number"
             name="phone"
@@ -87,7 +87,7 @@ function App() {
           />
         </label>
         <label>
-          qualification:
+          Qualification:
           <input
             type="text"
             name="qualification"
@@ -135,8 +135,19 @@ function App() {
         <br />
         <button type="submit">Submit</button>
       </form>
+
+      {/* Display form data and result */}
+      {formDataReceived && (
+        <div>
+          <h2><center>Form Data Received:</center></h2>
+          <pre>{JSON.stringify(formDataReceived, null, 2)}</pre>
+        </div>
+      )}
+
       {result !== null && (
-        <h2><center>Arithmetic Result: {result}</center></h2>
+        <div>
+          <h2><center>Arithmetic Result: {result}</center></h2>
+        </div>
       )}
     </div>
   );
