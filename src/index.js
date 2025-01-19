@@ -1,13 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom/client";  // Ensure ReactDOM is imported
+import App from "./App";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ResultPage from "./ResultPage";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+function Arpi() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/ResultPage" element={<ResultPage />} />
+      </Routes>
+    </Router>
+  );
+}
+
+// Get the root element
+const rootElement = document.getElementById("root");
+const root = ReactDOM.createRoot(rootElement);
+
+// Render the Arpi component in the root element
 root.render(
   <React.StrictMode>
-    <App />
+    <Arpi />
   </React.StrictMode>
 );
-
-;

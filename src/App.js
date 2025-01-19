@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import "./App.css";
+import './App.css';
 
 function App() {
   const [formData, setFormData] = useState({
@@ -17,23 +17,40 @@ function App() {
   const [result, setResult] = useState(null);
   const [formDataReceived, setFormDataReceived] = useState(null);
 
+  // Load saved data from localStorage on page load
+  useEffect(() => {
+    const savedFormData = localStorage.getItem('formData');
+    const savedResult = localStorage.getItem('operationResult');
+
+    if (savedFormData) {
+      setFormData(JSON.parse(savedFormData));
+    }
+    if (savedResult) {
+      setResult(JSON.parse(savedResult));
+    }
+  }, []);
+
+  // Handle form field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     try {
       // Send form data and arithmetic operation request together
       const response = await axios.post('http://localhost:5000/submit', formData);
-      
+
       // Set form data received and operation result to be displayed
       setFormDataReceived(response.data.receivedData);
-      setResult(response.data.operationResult); // <-- Make sure this is set with the response
+      setResult(response.data.operationResult);
 
-      // Log the response to console
+      // Save form data and result in localStorage
+      localStorage.setItem('formData', JSON.stringify(formData));
+      localStorage.setItem('operationResult', JSON.stringify(response.data.operationResult));
+      window.location.href="/ResultPage"
       console.log('Form and operation result received:', response.data);
     } catch (error) {
       alert('Error submitting data.');
@@ -76,6 +93,7 @@ function App() {
             required
           />
         </label>
+        <br />
         <label>
           Phone:
           <input
@@ -86,6 +104,7 @@ function App() {
             required
           />
         </label>
+        <br />
         <label>
           Qualification:
           <input
@@ -96,6 +115,7 @@ function App() {
             required
           />
         </label>
+        <br />
         <label>
           Number 1:
           <input
