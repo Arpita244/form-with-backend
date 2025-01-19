@@ -31,7 +31,7 @@ function App() {
       
       // Set form data received and operation result to be displayed
       setFormDataReceived(response.data.receivedData);
-      setResult(response.data.operationResult);
+      setResult(response.data.operationResult); // <-- Make sure this is set with the response
 
       // Log the response to console
       console.log('Form and operation result received:', response.data);
